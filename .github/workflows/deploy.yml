@@ -15,15 +15,9 @@ jobs:
 
       - name: Build artifact
         run: |
-          mkdir dist
+          mkdir -p dist
           cp index.html style.css script.js dist/
-          tar -czf site.tar.gz dist/
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: static-site
-          path: site.tar.gz
+          tar -czf site.tar.gz dist
 
       - name: Copy artifact to server
         uses: appleboy/scp-action@v0.1.7
@@ -43,5 +37,6 @@ jobs:
           script: |
             sudo rm -rf /var/www/site
             sudo mkdir -p /var/www/site
-            sudo tar -xzf /home/ubuntu/site.tar.gz -C /var/www/site
+            sudo tar -xzf /home/ubuntu/site.tar.gz -C /var/www/site --strip-components=1
             sudo chown -R www-data:www-data /var/www/site
+            sudo systemctl reload nginx
