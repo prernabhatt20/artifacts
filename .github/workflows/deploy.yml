@@ -1,9 +1,10 @@
-name: Build and Deploy Static Site
+name: Build and Deploy Static Site 
 
 on:
   push:
     branches:
       - main
+      - test
   workflow_dispatch:
   
 jobs:
@@ -14,6 +15,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
+      - name: Set deploy directory based on branch
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "DEPLOY_DIR=/var/www/site" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_DIR=/var/www/site-test" >> $GITHUB_ENV
+          fi
 
       - name: Build artifact
         run: |
