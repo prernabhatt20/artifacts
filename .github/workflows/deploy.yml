@@ -64,7 +64,7 @@ jobs:
           script: |
             sudo rm -rf /var/www/site
             sudo mkdir -p /var/www/site
-            sudo tar -xzf /home/ubuntu/${ARTIFACT_NAME}.tar.gz \
+            sudo tar -xzf /home/ubuntu/${{env.ARTIFACT_NAME}}.tar.gz \
               -C /var/www/site --strip-components=1
             sudo chown -R www-data:www-data /var/www/site
             sudo chmod -R 755 /var/www/site
